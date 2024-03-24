@@ -1,21 +1,23 @@
-const startButton = document.getElementById("start");
+const DeleteButton = document.getElementById("button");
+const studentContainer = document.getElementById("resourceSection");
+const studentCard = studentContainer.querySelectorAll(".resource");
+let studentObjectArray = [...studentCard];
 
-let h2prompt = document.getElementById("prompt");
-
-startButton.addEventListener("click", function () {
-  let promptValue = prompt("enter any value").toLocaleLowerCase();
-
-  if (isNaN(promptValue) && promptValue.length > 0) {
-    if (promptValue === "true") {
-      h2prompt.textContent = `You entered "${promptValue}" : This is a boolean data type`;
-    } else if (promptValue === "false") {
-      h2prompt.textContent = `You entered "${promptValue}" : This is a boolean data type`;
-    } else if (promptValue == null) {
-      h2prompt.textContent = "Oops! You did not enter any value.";
+console.log(studentObjectArray);
+DeleteButton.addEventListener("click", function () {
+  setTimeout(function () {
+    let index = Number(
+      prompt(
+        `Enter the Index of the Student you want to delete from 0 to ${
+          studentObjectArray.length - 1
+        }:`
+      )
+    );
+    if (!isNaN(index) && index >= 0 && index <= studentObjectArray.length) {
+      studentObjectArray.splice(index, 1);
+      studentContainer.removeChild(studentContainer.children[index]);
     } else {
-      h2prompt.textContent = `You entered "${promptValue}" : This is a String data type.`;
+      alert("Check the number you entered and try again");
     }
-  } else {
-    h2prompt.textContent = `You entered "${promptValue}" : This is a Number data type.`;
-  }
+  }, 500);
 });
