@@ -1,56 +1,64 @@
-const startQuiz = document.getElementById("quizButton");
-const conatainer = document.getElementById("displayScoreContainer");
+"use strict";
 
-//The function to fire the window prompts
+let secretNumber = Math.floor(Math.random() * 20) + 1;
+// console.log(secretNumber);
+let score = 20;
+let highscore = 0;
+let checkButton = document.querySelector(".check");
 
-startQuiz.addEventListener("click", function () {
-  const username = prompt("Enter your User Name");
+const displayMessage = function (message) {
+  document.querySelector(".message").textContent = message;
+};
 
-  const userId = prompt("Enter your user Id");
+checkButton.addEventListener("click", function () {
+  const guess = Number(document.querySelector(".guess").value);
+  console.log(guess, typeof guess);
 
-  if (!username && !userId) {
-    return alert("you did not enter any user name or Id");
-  } else {
-    alert(`Dear ${username} with ID ${userId} the quiz will begin now...`);
-  }
+  // When there is no input
+  if (!guess) {
+    // document.querySelector('.message').textContent = '⛔️ No number!';
+    displayMessage("⛔️ No number!");
 
-  const questions = [
-    "What year was Olusegun Obansanjo born?",
-    "What year was Late President Umaru Musa Yar'Adua born?",
-    "What year was Dr Goodluck Jonathan born?",
-    "What year was Mohammed Burhari born?",
-    "what year was recorded as the year of birth of President Bola Ahmed Tinubu?",
-  ];
+    // When player wins
+  } else if (guess === secretNumber) {
+    // document.querySelector('.message').textContent = '🎉 Correct Number!';
+    displayMessage("🎉 Correct Number!");
+    document.querySelector(".number").textContent = secretNumber;
 
-  questions[3];
+    document.querySelector("body").style.backgroundColor = "#60b347";
+    document.querySelector(".number").style.width = "30rem";
 
-  let scores = 0;
-  for (let i = 0; i < questions.length; i++) {
-    let answers = Number(prompt(questions[i]));
-    switch (true) {
-      case answers === 1937:
-        scores += 20;
-        break;
-      case answers === 1951:
-        scores += 20;
-        break;
-      case answers === 1957:
-        scores += 20;
-        break;
-      case answers === 1942:
-        scores += 20;
-        break;
-      case answers === 1952:
-        scores += 20;
-        break;
+    if (score > highscore) {
+      highscore = score;
+      document.querySelector(".highscore").textContent = highscore;
+    }
+
+    // When guess is wrong
+  } else if (guess !== secretNumber) {
+    if (score > 1) {
+      // document.querySelector('.message').textContent =
+      // guess > secretNumber ? '📈 Too high!' : '📉 Too low!';
+      displayMessage(guess > secretNumber ? "📈 Too high!" : "📉 Too low!");
+      score--;
+      document.querySelector(".score").textContent = score;
+    } else {
+      // document.querySelector('.message').textContent = '💥 You lost the game!';
+      displayMessage("💥 You lost the game!");
+      document.querySelector(".score").textContent = 0;
     }
   }
-  conatainer.innerHTML = "";
-  let user = document.createElement("h3");
-  let result = document.createElement("p");
+});
 
-  user.textContent = `Hello ${username} with ID${userId} ✨`;
-  result.textContent = `Congratulations 🎉 You scored ${scores}% 0ver 100%`;
+document.querySelector(".again").addEventListener("click", function () {
+  score = 20;
+  secretNumber = Math.trunc(Math.random() * 20) + 1;
 
-  conatainer.append(user, result);
+  // document.querySelector('.message').textContent = 'Start guessing...';
+  displayMessage("Start guessing...");
+  document.querySelector(".score").textContent = score;
+  document.querySelector(".number").textContent = "?";
+  document.querySelector(".guess").value = "";
+
+  document.querySelector("body").style.backgroundColor = "#222";
+  document.querySelector(".number").style.width = "15rem";
 });
